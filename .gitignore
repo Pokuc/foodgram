@@ -140,3 +140,12 @@ dmypy.json
 
 static/
 media/
+
+**/.DS_Store
+
+# Others
+node_modules
+
+**/collected_static
+
+**/db.sqlite3.bak

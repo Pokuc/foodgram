@@ -1,0 +1,12 @@
+Django==4.2.16
+pillow==10.4.0
+djangorestframework==3.15.2
+djoser==2.1.0
+django-filter==23.1
+python-dotenv==1.0.1
+flake8==7.1.1
+django-cors-headers==3.13.0
+psycopg2-binary==2.9.3
+PyYAML==6.0
+gunicorn==20.1.0
+drf-extra-fields==3.7.0
