@@ -22,8 +22,6 @@ class User(AbstractUser):
         verbose_name='Электронная почта',
         help_text='Адрес электронной почты: обязательное поле',
         unique=True,
-        blank=False,
-        null=False,
     )
     username = models.CharField(
         max_length=MAX_LENGTH_USERNAME,

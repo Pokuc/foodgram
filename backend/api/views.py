@@ -18,6 +18,7 @@ from api.serializers import (
     IngredientSerializer,
     RecipeCreateSerializer,
     RecipeReadSerializer,
+    SubscriptionSerializer,
     TagSerializer
 )
 from api.utils import structure_file
@@ -58,7 +59,7 @@ class UserViewSet(viewsets.GenericViewSet):
                                         data=request.data,
                                         partial=True,
                                         context={'request': request})
-            if serializer.is_valid():
+            if serializer.is_valid(raise_exception=True):
                 serializer.save()
                 return Response({"avatar": serializer.data.get('avatar')},
                                 status=status.HTTP_200_OK)
@@ -98,14 +99,10 @@ class UserViewSet(viewsets.GenericViewSet):
         reader = request.user
         blogger = get_object_or_404(User, pk=pk)
         if request.method == 'POST':
-            if reader == blogger:
-                return Response({'message': 'Нельзя подписаться на себя.'},
-                                status=status.HTTP_400_BAD_REQUEST)
-            if Follow.objects.filter(user=reader,
-                                     following=blogger).exists():
-                return Response({'message':
-                                 f'Вы уже подписаны на {blogger.username}.'},
-                                status=status.HTTP_400_BAD_REQUEST)
+            serializer = SubscriptionSerializer(
+                data={'user': reader, 'following': blogger}
+            )
+            serializer.is_valid(raise_exception=True)
 
             Follow.objects.create(user=reader, following=blogger)
             serializer = FollowSerializer(blogger,
@@ -216,7 +213,6 @@ class RecipeViewSet(ModelViewSet):
                          .values('ingredient__name',
                                  'ingredient__measurement_unit')
                          .annotate(amount=Sum('amount')))
-        print(shopping_list)
         if not shopping_list.exists():
             return Response({'detail': 'Ваш список покупок пуст.'},
                             status=status.HTTP_400_BAD_REQUEST)

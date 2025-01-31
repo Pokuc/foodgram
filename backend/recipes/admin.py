@@ -2,7 +2,6 @@ from django.forms.models import BaseInlineFormSet
 from django.contrib import admin
 from django.core.exceptions import ValidationError
 
-
 from recipes.models import (
     Favorite,
     Ingredient,

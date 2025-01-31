@@ -151,14 +151,14 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
                 {'ingredients': "Укажите хотя бы один ингредиент."}
             )
 
-        ingredients_list = []
+        ingredients = []
 
         for item in ingredients:
-            if item['id'] in ingredients_list:
+            if item['id'] in ingredients:
                 raise serializers.ValidationError(
                     {'ingredients': "Ингредиенты не должны повторяться."}
                 )
-            ingredients_list.append(item['id'])
+            ingredients.append(item['id'])
 
         return value
 
@@ -320,3 +320,23 @@ class FollowSerializer(serializers.ModelSerializer):
 
     def get_recipes_count(self, obj):
         return Recipe.objects.filter(author=obj).count()
+
+
+class SubscriptionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Follow
+        fields = ['user', 'following']
+
+    def validate(self, attrs):
+        reader = attrs.get('user')
+        blogger = attrs.get('following')
+
+        if reader == blogger:
+            raise serializers.ValidationError("Нельзя подписаться на себя.")
+
+        if Follow.objects.filter(user=reader, following=blogger).exists():
+            raise serializers.ValidationError(
+                f'Вы уже подписаны на {blogger.username}.'
+            )
+
+        return attrs

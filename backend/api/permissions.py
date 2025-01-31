@@ -2,9 +2,7 @@ from rest_framework import permissions
 
 
 class IsOwnerOrReadOnly(permissions.BasePermission):
-    """
-    Запрещает пользователям изменять чужие данные профилей.
-    """
+    """Запрещает пользователям изменять чужие данные профилей."""
 
     def has_permission(self, request, view):
         return request.user.is_authenticated if view.action == 'me' else True
