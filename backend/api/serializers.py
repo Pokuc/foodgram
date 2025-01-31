@@ -323,6 +323,12 @@ class FollowSerializer(serializers.ModelSerializer):
 
 
 class SubscriptionSerializer(serializers.ModelSerializer):
+    """
+    Сериализатор подписок, который обрабатывает логику проверки, гарантируя,
+    что пользователь не сможет подписаться на себя и на одного и того же
+    блоггера несколько раз.
+    """
+
     class Meta:
         model = Follow
         fields = ['user', 'following']
