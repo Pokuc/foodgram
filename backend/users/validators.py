@@ -1,7 +1,6 @@
 from django.core.exceptions import ValidationError
 
 from users.constants import (
-    FORBIDDEN_NAME,
     MAX_FILE_SIZE_AVATAR,
 )
 
