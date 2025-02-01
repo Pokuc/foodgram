@@ -74,14 +74,6 @@ class RecipeAdmin(admin.ModelAdmin):
         return obj.favorite.count()
 
 
-@admin.register(RecipeIngredient)
-class RecipeIngredientAdmin(admin.ModelAdmin):
-    """Класс настройки модели Recipe в админке."""
-
-    list_display = ('recipe', 'ingredient', 'amount')
-    search_fields = ('recipe__name', 'ingredient__username')
-
-
 @admin.register(Favorite)
 class FavoriteAdmin(admin.ModelAdmin):
     """Класс настройки модели Favorite в админке."""
