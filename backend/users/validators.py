@@ -5,13 +5,6 @@ from users.constants import (
 )
 
 
-def validate_username(username):
-    if username.lower() == FORBIDDEN_NAME:
-        raise ValidationError(
-            f'Имя {FORBIDDEN_NAME} нельзя использовать'
-            'в качестве имени пользователя Foodgram.')
-
-
 def validate_image_size(image):
     file_size = image.file.size
     if file_size > MAX_FILE_SIZE_AVATAR * 1024 * 1024:

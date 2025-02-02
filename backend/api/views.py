@@ -18,7 +18,6 @@ from api.serializers import (
     IngredientSerializer,
     RecipeCreateSerializer,
     RecipeReadSerializer,
-    SubscriptionSerializer,
     TagSerializer
 )
 from api.utils import structure_file
@@ -99,23 +98,19 @@ class UserViewSet(viewsets.GenericViewSet):
         reader = request.user
         blogger = get_object_or_404(User, pk=pk)
         if request.method == 'POST':
-            serializer = SubscriptionSerializer(
-                data={'user': reader, 'following': blogger}
-            )
+            serializer = FollowSerializer(data={
+                'user': reader.id, 'following': blogger.id
+            }, context={'request': request})
             serializer.is_valid(raise_exception=True)
 
-            Follow.objects.create(user=reader, following=blogger)
-            serializer = FollowSerializer(blogger,
-                                          context={'request': request})
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            if serializer.create_follow():
+                return Response(serializer.data,
+                                status=status.HTTP_201_CREATED)
 
-        try:
-            subscription = Follow.objects.get(user=reader, following=blogger)
-            subscription.delete()
-            return Response({'message':
-                             f'Вы отписались от {blogger.username}'},
-                            status=status.HTTP_204_NO_CONTENT)
-        except Follow.DoesNotExist:
+        elif request.method == 'DELETE':
+            if serializer.delete_follow():
+                return Response(status=status.HTTP_204_NO_CONTENT)
+        else:
             return Response({'message':
                              f'Вы не подписаны на {blogger.username}.'},
                             status=status.HTTP_400_BAD_REQUEST)

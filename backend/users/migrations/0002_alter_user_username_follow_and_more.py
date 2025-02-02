@@ -17,7 +17,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='user',
             name='username',
-            field=models.CharField(help_text='Имя пользователя: обязательное поле', max_length=150, unique=True, validators=[django.core.validators.RegexValidator(message='Неверный формат', regex='^[\\w.@+-]+\\Z'), users.validators.validate_username], verbose_name='Юзернейм'),
+            field=models.CharField(help_text='Имя пользователя: обязательное поле', max_length=150, unique=True, validators=[django.core.validators.RegexValidator(message='Неверный формат')], verbose_name='Юзернейм'),
         ),
         migrations.CreateModel(
             name='Follow',

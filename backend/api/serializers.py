@@ -321,28 +321,25 @@ class FollowSerializer(serializers.ModelSerializer):
     def get_recipes_count(self, obj):
         return Recipe.objects.filter(author=obj).count()
 
+    def create_follow(self):
+        user = self.validated_data['user']
+        following = self.validated_data['following']
 
-class SubscriptionSerializer(serializers.ModelSerializer):
-    """
-    Сериализатор подписок, который обрабатывает логику проверки, гарантируя,
-    что пользователь не сможет подписаться на себя и на одного и того же
-    блоггера несколько раз.
-    """
+        if user == following:
+            raise serializers.ValidationError('Нельзя подписаться на себя.')
+        if Follow.objects.filter(user=user, following=following).exists():
+            raise serializers.ValidationError('Вы уже подписаны')
 
-    class Meta:
-        model = Follow
-        fields = ['user', 'following']
+        Follow.objects.create(user=user, following=following)
+        return self.to_representation(following)
 
-    def validate(self, attrs):
-        reader = attrs.get('user')
-        blogger = attrs.get('following')
-
-        if reader == blogger:
-            raise serializers.ValidationError("Нельзя подписаться на себя.")
-
-        if Follow.objects.filter(user=reader, following=blogger).exists():
-            raise serializers.ValidationError(
-                f'Вы уже подписаны на {blogger.username}.'
-            )
-
-        return attrs
+    def delete_follow(self):
+        user = self.context['request'].user
+        following = self.validated_data['following']
+        
+        try:
+            subscription = Follow.objects.get(user=user, following=following)
+            subscription.delete()
+            return True
+        except Follow.DoesNotExist:
+            return False

@@ -27,7 +27,7 @@ class Migration(migrations.Migration):
                 ('is_active', models.BooleanField(default=True, help_text='Designates whether this user should be treated as active. Unselect this instead of deleting accounts.', verbose_name='active')),
                 ('date_joined', models.DateTimeField(default=django.utils.timezone.now, verbose_name='date joined')),
                 ('email', models.EmailField(help_text='Адрес электронной почты: обязательное поле', max_length=254, unique=True, verbose_name='Электронная почта')),
-                ('username', models.CharField(help_text='Имя пользователя: обязательное поле', max_length=150, unique=True, validators=[django.core.validators.RegexValidator(message='Неверный формат', regex='^[\\w.@+-]+\\z'), users.validators.validate_username], verbose_name='Юзернейм')),
+                ('username', models.CharField(help_text='Имя пользователя: обязательное поле', max_length=150, unique=True, validators=[django.core.validators.RegexValidator(message='Неверный формат')], verbose_name='Юзернейм')),
                 ('first_name', models.CharField(help_text='Имя: обязательное поле', max_length=150, verbose_name='Имя')),
                 ('last_name', models.CharField(help_text='Фамилия: обязательное поле', max_length=150, verbose_name='Фамилия')),
                 ('avatar', models.ImageField(blank=True, help_text='Вы можете загрузить аватарку', null=True, upload_to='users/', validators=[users.validators.validate_image_size, users.validators.validate_image_format], verbose_name='Картинка пользователя')),
