@@ -29,7 +29,7 @@ from recipes.models import (
     ShoppingList,
     Tag
 )
-from users.models import User, Follow
+from users.models import User
 
 
 class UserViewSet(viewsets.GenericViewSet):

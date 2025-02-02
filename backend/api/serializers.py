@@ -336,7 +336,7 @@ class FollowSerializer(serializers.ModelSerializer):
     def delete_follow(self):
         user = self.context['request'].user
         following = self.validated_data['following']
-        
+
         try:
             subscription = Follow.objects.get(user=user, following=following)
             subscription.delete()
